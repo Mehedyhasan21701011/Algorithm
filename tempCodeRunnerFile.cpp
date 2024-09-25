@@ -1,6 +1,27 @@
+#include <bits/stdc++.h>
+using namespace std;
 
-        for (int k = 0; k < x; k++)
+#define V 5
+
+void print_mst(int parent[V], int graph[V][V])
+{
+    for (int i = 0; i < V; i++)
+    {
+        cout << parent[i] << "--->" << graph[i][parent[i]] << endl;
+    }
+    cout << endl;
+}
+
+int min_key(bool mst_set[], int key[])
+{
+    int min = INT_MIN, min_index;
+    for (int i = 0; i < V; i++)
+    {
+        if (!mst_set[i] && key[i] < min)
         {
-            cout << array[k] << " ";
+            min = key[i];
+            min_index = i;
         }
-        cout << endl;
+    }
+    return min_index;
+}

@@ -1,53 +1,53 @@
-#include <bits/stdc++.h>
+
+#include <iostream>
 using namespace std;
 
-void add(vector<int> adj[], int u, int v)
+// Function to add edges to the adjacency list
+void add(int adj[][6], int u, int v)
 {
-    adj[u].push_back(v);
-    adj[v].push_back(u);
+    adj[u][v] = 1;
+    adj[v][u] = 1;
 }
-void print(vector<int> adj[], int V)
+
+// Function to print the adjacency matrix
+void print(int adj[][6], int V)
 {
     for (int i = 0; i < V; i++)
     {
         cout << i << "-->";
-        for (auto x : adj[i])
+        for (int j = 0; j < V; j++)
         {
-            cout << x << "    ";
+            if (adj[i][j])
+            {
+                cout << j << "    ";
+            }
         }
         cout << endl;
     }
 }
-vector<int> BFS_function(int start, vector<int> adj[], int V)
+
+// Function to implement BFS without using STL
+void BFS_function(int start, int adj[][6], int V)
 {
-    vector<int> result;
-    vector<int> visited(V, 0);
+    int result[6], visited[6] = {0}, queue[6];
 
-    queue<int> q;
-    q.push(start);
-    visited[start] = 1;
+    queue[0] = start;
+    visited[0] = 1;
 
-    while (!q.empty())
-    {
-        int node = q.front();
-        q.pop();
-        result.push_back(node);
-
-        for (auto it : adj[node])
-        {
-            if (!visited[it])
-            {
-                q.push(it);
-                visited[it] = 1;
-            }
-        }
-    }
-    return result;
+    // Print BFS result
+    // cout << "BFS Result:" << endl;
+    // for (int i = 0; i < index; i++) {
+    //     cout << result[i] << "  ";
+    // }
+    // cout << endl;
 }
+
 int main()
 {
     int V = 6;
-    vector<int> adj[V];
+    int adj[6][6] = {0}; // Adjacency matrix initialized to 0
+
+    // Adding edges
     add(adj, 0, 1);
     add(adj, 1, 2);
     add(adj, 1, 5);
@@ -56,13 +56,12 @@ int main()
     add(adj, 5, 4);
     add(adj, 3, 4);
 
+    // Print adjacency matrix
     print(adj, V);
+
+    // Start BFS from vertex 0
     int start = 0;
-    vector<int> bfs = BFS_function(start, adj, V);
-    cout << "BFS rEsult:" << endl;
-    for (auto x : bfs)
-    {
-        cout << x << "  ";
-    }
-    cout << endl;
+    BFS_function(start, adj, V);
+
+    return 0;
 }
