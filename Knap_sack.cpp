@@ -1,45 +1,80 @@
 #include <iostream>
+
 using namespace std;
 
-// Function to find the maximum value that can be obtained with the given capacity
-int knapsack(int capacity, int weights[], int values[], int n)
+// Function to swap two items
+void swap(double *a, double *b)
 {
-    // Create a 2D array to store the maximum value at each n, capacity combination
-    int dp[n + 1][capacity + 1];
+    double temp = *a;
+    *a = *b;
+    *b = temp;
+}
 
-    // Initialize the dp array
-    for (int i = 0; i <= n; i++)
+// Function to sort items by profit/weight ratio
+void sortItems(int n, double profit[], double weight[], double ratio[])
+{
+    for (int i = 0; i < n - 1; i++)
     {
-        for (int w = 0; w <= capacity; w++)
+        for (int j = 0; j < n - i - 1; j++)
         {
-            if (i == 0 || w == 0)
-                dp[i][w] = 0; // Base case: no items or zero capacity
-            else if (weights[i - 1] <= w)
+            if (ratio[j] < ratio[j + 1])
             {
-                // Item can be included
-                dp[i][w] = max(dp[i - 1][w], dp[i - 1][w - weights[i - 1]] + values[i - 1]);
-            }
-            else
-            {
-                // Item cannot be included
-                dp[i][w] = dp[i - 1][w];
+                // Swap ratio, profit, and weight
+                swap(&ratio[j], &ratio[j + 1]);
+                swap(&profit[j], &profit[j + 1]);
+                swap(&weight[j], &weight[j + 1]);
             }
         }
     }
+}
 
-    // The maximum value is found at dp[n][capacity]
-    return dp[n][capacity];
+// Function to calculate the maximum profit using fractional knapsack
+double fractionalKnapsack(int n, double profit[], double weight[], double capacity)
+{
+    double totalProfit = 0.0;
+    double ratio[n];
+
+    // Calculate profit/weight ratio for each item
+    for (int i = 0; i < n; i++)
+    {
+        ratio[i] = profit[i] / weight[i];
+    }
+    sortItems(n, profit, weight, ratio);
+
+    for (int i = 0; i < n; i++)
+    {
+        if (capacity >= weight[i])
+        {
+            capacity -= weight[i];
+            totalProfit += profit[i];
+        }
+        else
+        {
+            // Add fractional part of the item
+            totalProfit += profit[i] * (capacity / weight[i]);
+            break;
+        }
+    }
+
+    return totalProfit;
 }
 
 int main()
 {
-    int values[] = {60, 100, 120};              // Values of items
-    int weights[] = {10, 20, 30};               // Weights of items
-    int capacity = 50;                          // Maximum capacity of the knapsack
-    int n = sizeof(values) / sizeof(values[0]); // Number of items
+    // Number of items
+    int n = 7; // Corrected to 7 to match the number of items in the arrays
 
-    int maxValue = knapsack(capacity, weights, values, n);
-    cout << "Maximum value in Knapsack = " << maxValue << endl;
+    // Arrays for profits and weights
+    double profit[] = {10, 5, 15, 7, 6, 18, 3};
+    double weight[] = {2, 3, 5, 7, 1, 4, 1};
+
+    // Capacity of the knapsack
+    double capacity = 15;
+
+    // Calculate and display the maximum profit
+    double maxProfit = fractionalKnapsack(n, profit, weight, capacity);
+
+    cout << "Maximum Profit: " << maxProfit << endl;
 
     return 0;
 }

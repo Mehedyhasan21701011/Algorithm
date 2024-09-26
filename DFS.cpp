@@ -6,18 +6,7 @@ void add(vector<int> adj[], int u, int v)
     adj[u].push_back(v);
     adj[v].push_back(u);
 }
-void print(vector<int> adj[], int V)
-{
-    for (int i = 0; i < V; i++)
-    {
-        cout << i << "-->";
-        for (auto x : adj[i])
-        {
-            cout << x << "   ";
-        }
-        cout << endl;
-    }
-}
+
 void dfs_call(int node, vector<int> adj[], int visited[], vector<int> &dfs_list)
 {
     visited[node] = 1;
@@ -55,7 +44,5 @@ int main()
     add(adj, 2, 3);
     add(adj, 5, 4);
     add(adj, 3, 4);
-
-    print(adj, V);
     dfs_function(adj, V);
 }

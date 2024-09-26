@@ -1,27 +1,12 @@
-#include <bits/stdc++.h>
-using namespace std;
-
-#define V 5
-
-void print_mst(int parent[V], int graph[V][V])
+void dfs_call(int node, vector<int> adj[], int visited[], vector<int> &dfs_list)
 {
-    for (int i = 0; i < V; i++)
+    visited[node] = 1;
+    dfs_list.push_back(node);
+    for (auto x : adj[node])
     {
-        cout << parent[i] << "--->" << graph[i][parent[i]] << endl;
-    }
-    cout << endl;
-}
-
-int min_key(bool mst_set[], int key[])
-{
-    int min = INT_MIN, min_index;
-    for (int i = 0; i < V; i++)
-    {
-        if (!mst_set[i] && key[i] < min)
+        if (!visited[x])
         {
-            min = key[i];
-            min_index = i;
+            dfs_call(x, adj, visited, dfs_list);
         }
     }
-    return min_index;
 }
